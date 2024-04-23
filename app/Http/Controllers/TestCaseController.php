@@ -23,7 +23,6 @@ class TestCaseController extends Controller
     function newTestCase()
     {
 
-        $db_name = env('DB_DATABASE', 'testcasetify');
 
         $data = ProjectModel::where('project_id',  session('active_project'))
                     ->select('project_members')
@@ -36,11 +35,19 @@ class TestCaseController extends Controller
             $members = $data['project_members'];
         }
 
-        $autoIncrementValue = DB::table('information_schema.TABLES')
-            ->select('AUTO_INCREMENT AS AI')
-            ->where('TABLE_SCHEMA', '=', $db_name)
-            ->where('TABLE_NAME', '=', 'tbl_test_cases')
-            ->value('AI');
+        
+        // $db_name = env('DB_DATABASE', 'testcasetify');
+        // $autoIncrementValue = DB::table('information_schema.TABLES')
+        //     ->select('AUTO_INCREMENT AS AI')
+        //     ->where('TABLE_SCHEMA', '=', $db_name)
+        //     ->where('TABLE_NAME', '=', 'tbl_test_cases')
+        //     ->value('AI');
+
+        // $tableName = 'your_table_name';
+        $autoIncrementValue = DB::select("SHOW TABLE STATUS LIKE 'tbl_test_cases'");
+        
+        // Extract the auto increment value from the result
+        $autoIncrementValue = $autoIncrementValue[0]->Auto_increment;   
 
         return view('pages/new-test-case', compact('members', 'autoIncrementValue'));
     }
