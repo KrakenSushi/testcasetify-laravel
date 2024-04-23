@@ -16,7 +16,7 @@
             <td>{{ $item -> tc_module_name }}</td>
             <td>
                 <a href="/test-case?id={{ $item -> id }}" class="btn btn-primary" ><i class="fas fa-arrow-up-right-from-square"></i>  Open</a>
-                <button type="button" class="btn btn-danger btnDeleteTC" data-id="{{ $item -> id }}"><i class="fas fa-trash"></i>  Delete</button>
+                <button type="button" class="btn btn-warning btnDeleteTC" data-id="{{ $item -> id }}"><i class="fas fa-trash"></i></button>
 
             </td>
         </tr>

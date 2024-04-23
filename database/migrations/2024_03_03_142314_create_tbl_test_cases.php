@@ -16,7 +16,11 @@ return new class extends Migration
         Schema::create('tbl_test_cases', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('project_id');
-            $table->foreign('project_id')->references('project_id')->on('tbl_projects');
+            $table->foreign('project_id')
+                ->references('project_id')
+                ->on('tbl_projects')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->string('tc_title');
             $table->integer('tc_num');
             $table->string('tc_des_by');

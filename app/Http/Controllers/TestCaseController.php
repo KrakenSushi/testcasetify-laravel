@@ -83,28 +83,37 @@ class TestCaseController extends Controller
 
     function testCase(Request $request)
     {
-        $data = $request->only('id');
+        if($request->has('id') && $request->input('id') !== null){
+             $data = $request->only('id');
 
-        $result = TestCaseModel::where('id', $data['id'])->first();
+            $result = TestCaseModel::where('id', $data['id'])->first();
 
-        $data = ProjectModel::where('project_id',  session('active_project'))
-                    ->select('project_members')
-                    ->first();
+            $data = ProjectModel::where('project_id',  session('active_project'))
+                        ->select('project_members')
+                        ->first();
 
-        if (str_contains($data['project_members'], "\r\n")) {
-            $members = explode("\r\n", $data['project_members']);
-        } elseif (str_contains($data['project_members'], "\n")) {
-            $members = explode("\n", $data['project_members']);
-        } else {
-            $members = $data['project_members'];
+            if (str_contains($data['project_members'], "\r\n")) {
+                $members = explode("\r\n", $data['project_members']);
+            } elseif (str_contains($data['project_members'], "\n")) {
+                $members = explode("\n", $data['project_members']);
+            } else {
+                $members = $data['project_members'];
+            }
+            
+            return view('pages/test-case', compact('result', 'members'));
+        }else{
+            return redirect()->intended('test-cases');
         }
-        
-        return view('pages/test-case', compact('result', 'members'));
+       
     }
 
     function testSteps(Request $request)
     {
-        return view('pages/test-steps');
+        if($request->has('id')){
+            return view('pages/test-steps');
+        }else{
+            return back();
+        }
     }
 
     ##################################__Helper_Functions__############################################
@@ -236,7 +245,6 @@ class TestCaseController extends Controller
         $data = $request->only('tc_id');
 
         $delete_tc = TestCaseModel::find($data['tc_id']);
-
 
         if($delete_tc->delete()){
             return response()->json([

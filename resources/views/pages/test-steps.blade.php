@@ -281,6 +281,18 @@
             },
           });
       }
+      
+      @if(!request()->has('id') || request()->input('id') == null)
+        Swal.fire({
+          icon: "error",
+          title: "URL Error",
+          html: "<span id='swal2html'>A URL parameter wasn't set properly. <br> Please re-select test case from the list</span>",
+          footer: '<a href="/test-cases" class="btn btn-primary"><i class="fas fa-chevron-left"></i> Go back</a>',
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        });
+      @endif
 
     });
   </script>

@@ -73,65 +73,80 @@
 @endsection
 @section('js')
     <script>
+        let clickCounter = 0;
 
         $('#testCasesList').on('click', '.btnDeleteTC', function(){
             let proj_id = {{ session('active_project') }};
             let id = $(this).data('id');
+            clickCounter++;
 
-            $.ajax({
-                method: "post",
-                url: "{{ route('deleteTC') }}",
-                data: {'tc_id' : id},
-                success: function(response){
-                    //Set active_project session value
-                    $.ajax({
-                        type  : 'post',
-                        url   : '{{ route("setActiveProject") }}',
-                        data  :  { 'project_id': proj_id },
-                        success: function(response){
-                            // console.log(response);
-                            if(typeof response =='object'){
-                                $('#testCasesList').html(response.html);
-                            }else{
-                                $('#testCasesList').html(response);
+            console.log(clickCounter);
+
+            if(clickCounter == 2){
+                $.ajax({
+                    method: "post",
+                    url: "{{ route('deleteTC') }}",
+                    data: {'tc_id' : id},
+                    success: function(response){
+                        //Set active_project session value
+                        $.ajax({
+                            type  : 'post',
+                            url   : '{{ route("setActiveProject") }}',
+                            data  :  { 'project_id': proj_id },
+                            success: function(response){
+                                clickCounter = 0;
+                                if(typeof response =='object'){
+                                    $('#testCasesList').html(response.html);
+                                }else{
+                                    $('#testCasesList').html(response);
+                                }
+                                
+                            },
+                            error: function(error){
+                                    Swal.fire({
+                                        toast: true,
+                                        position: "top-end",
+                                        icon: "error",
+                                        title: "Server Error!",
+                                        html: "Check Logs",
+                                        showConfirmButton: false,
+                                        showCloseButton: true,
+                                    })
+                                console.error(error);
                             }
-                        },
-                        error: function(error){
-                                Swal.fire({
-                                    toast: true,
-                                    position: "top-end",
-                                    icon: "error",
-                                    title: "Server Error!",
-                                    html: "Check Logs",
-                                    showConfirmButton: false,
-                                    showCloseButton: true,
-                                })
-                            console.error(error);
-                        }
-                    }); //End inner AJAX
-                    Swal.fire({
-                        toast: true,
-                        position: "top-end",
-                        icon: "success",
-                        title: response.msg,
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                    })
-                },
-                error: function(error){
-                    Swal.fire({
-                        toast: true,
-                        position: "top-end",
-                        icon: "error",
-                        title: "Server Error!",
-                        html: "Check Logs",
-                        showConfirmButton: false,
-                        showCloseButton: true,
-                    })
-                console.error(error);
-                }
-            }); //End Touter AJAX
+                        }); //End inner AJAX
+                        Swal.fire({
+                            toast: true,
+                            position: "top-end",
+                            icon: "success",
+                            title: response.msg,
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                        })
+                    },
+                    error: function(error){
+                        Swal.fire({
+                            toast: true,
+                            position: "top-end",
+                            icon: "error",
+                            title: "Server Error!",
+                            html: "Check Logs",
+                            showConfirmButton: false,
+                            showCloseButton: true,
+                        })
+                    console.error(error);
+                    }
+                }); //End Outer AJAX
+            }else{
+                $(this).removeClass('btn-warning').addClass('btn-danger').html('<i class="fas fa-question"></i>');
+
+                setTimeout(() => {
+                    $(this).removeClass('btn-danger').addClass('btn-warning').html('<i class="fas fa-trash"></i>');
+                    clickCounter = 0;
+                }, 2000);
+            }
+            
         }); // End event listener
         $('#selectedProject').on('change', function(){
             let selectedProjectID = $(this).val();

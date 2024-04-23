@@ -38,7 +38,7 @@
 @endsection  
 
 @section('body')
-    <span id="ai_value" class="d-nsone">{{ $autoIncrementValue }}</span>
+    <span id="ai_value" class="d-none">{{ $autoIncrementValue }}</span>
     <div class="container-fluid py-4">
       <div class="row mt-4">
         <div class="col">

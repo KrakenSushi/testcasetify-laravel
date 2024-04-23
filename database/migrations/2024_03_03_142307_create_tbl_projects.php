@@ -16,7 +16,11 @@ return new class extends Migration
         Schema::create('tbl_projects', function (Blueprint $table) {
             $table->id('project_id');
             $table->unsignedBigInteger('project_owner');
-            $table->foreign('project_owner')->references('id')->on('tbl_users');
+            $table->foreign('project_owner')
+                ->references('id')
+                ->on('tbl_users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->string('project_name');
             $table->text('project_members');
             $table->text('project_desc');

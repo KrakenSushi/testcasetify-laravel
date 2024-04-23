@@ -25115,6 +25115,10 @@ p {
   background-color: #051139 !important;
 }
 
+.dark-version #swal2html{
+  color: #000 !important;
+}
+
 .dark-input{
   /* background-color: #111c44 !important; */
   background-color: #2e3861 !important;
