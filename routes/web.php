@@ -44,6 +44,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/checkTestCaseNum', [TestCaseController::class, 'checkTestCaseNum'])->name('checkTestCaseNum');
     Route::match(['post', 'get'], '/test-steps', [TestCaseController::class, 'testSteps'])->name('testSteps');
     Route::get('/test-case', [TestCaseController::class, 'testCase'])->name('testCase');
+
+    Route::post('/deleteTestCase', [TestCaseController::class, 'deleteTestCase'])->name('deleteTC');
     Route::get('/test-steps', [TestCaseController::class, 'testSteps'])->name('testSteps');
     Route::post('/fetchTestSteps', [TestCaseController::class, 'fetchTestSteps'])->name('fetchTestSteps');
     Route::post('/saveTestSteps', [TestCaseController::class, 'saveTestSteps'])->name('saveTestSteps');

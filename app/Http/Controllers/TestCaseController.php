@@ -22,6 +22,9 @@ class TestCaseController extends Controller
 
     function newTestCase()
     {
+
+        $db_name = env('DB_DATABASE', 'testcasetify');
+
         $data = ProjectModel::where('project_id',  session('active_project'))
                     ->select('project_members')
                     ->first();
@@ -35,7 +38,7 @@ class TestCaseController extends Controller
 
         $autoIncrementValue = DB::table('information_schema.TABLES')
             ->select('AUTO_INCREMENT AS AI')
-            ->where('TABLE_SCHEMA', '=', 'testcasetify-laravel')
+            ->where('TABLE_SCHEMA', '=', $db_name)
             ->where('TABLE_NAME', '=', 'tbl_test_cases')
             ->value('AI');
 
@@ -219,6 +222,28 @@ class TestCaseController extends Controller
         }else{
             return response('Error');
         }
+    }
+
+    function deleteTestCase(Request $request)
+    {
+        $data = $request->only('tc_id');
+
+        $delete_tc = TestCaseModel::find($data['tc_id']);
+
+
+        if($delete_tc->delete()){
+            return response()->json([
+                'status'=> 'success',
+                'msg'=> "Successfully deleted the Test Case!" 
+            ]);
+        }else{
+            return response()->json([
+                'status'=> 'error',
+                'msg'=> "Failed to delete the Test Case!" 
+            ]);
+        }
+
+        
     }
 
 }

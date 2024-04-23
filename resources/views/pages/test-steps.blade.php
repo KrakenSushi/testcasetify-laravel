@@ -57,7 +57,7 @@
                 <i class="fas fa-chevron-left fa-3x"></i>
               </a>
             </div>
-            <div class="card-body p-3 pt-1">
+            <div class="card-body p-3 pt-1" style="height: 65vh; width: 100%; overflow-y: scroll">
               <div class="table-responsive">
                 <table class="table" id="table">
                 <thead>
@@ -70,7 +70,7 @@
                     <th style="width:10%;">Status</th>
                   </tr>
                 </thead>
-                  <tbody id="tbody" style="height: 60vh; overflow: auto">
+                  <tbody id="tbody">
                   <!-- Placeholder -->
                   
                   </tbody>

@@ -73,6 +73,66 @@
 @endsection
 @section('js')
     <script>
+
+        $('#testCasesList').on('click', '.btnDeleteTC', function(){
+            let proj_id = {{ session('active_project') }};
+            let id = $(this).data('id');
+
+            $.ajax({
+                method: "post",
+                url: "{{ route('deleteTC') }}",
+                data: {'tc_id' : id},
+                success: function(response){
+                    //Set active_project session value
+                    $.ajax({
+                        type  : 'post',
+                        url   : '{{ route("setActiveProject") }}',
+                        data  :  { 'project_id': proj_id },
+                        success: function(response){
+                            // console.log(response);
+                            if(typeof response =='object'){
+                                $('#testCasesList').html(response.html);
+                            }else{
+                                $('#testCasesList').html(response);
+                            }
+                        },
+                        error: function(error){
+                                Swal.fire({
+                                    toast: true,
+                                    position: "top-end",
+                                    icon: "error",
+                                    title: "Server Error!",
+                                    html: "Check Logs",
+                                    showConfirmButton: false,
+                                    showCloseButton: true,
+                                })
+                            console.error(error);
+                        }
+                    }); //End inner AJAX
+                    Swal.fire({
+                        toast: true,
+                        position: "top-end",
+                        icon: "success",
+                        title: response.msg,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                    })
+                },
+                error: function(error){
+                    Swal.fire({
+                        toast: true,
+                        position: "top-end",
+                        icon: "error",
+                        title: "Server Error!",
+                        html: "Check Logs",
+                        showConfirmButton: false,
+                        showCloseButton: true,
+                    })
+                console.error(error);
+                }
+            }); //End Touter AJAX
+        }); // End event listener
         $('#selectedProject').on('change', function(){
             let selectedProjectID = $(this).val();
             console.log('ProjectID: '+selectedProjectID);
